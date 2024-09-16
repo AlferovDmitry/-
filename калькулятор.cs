@@ -1,76 +1,77 @@
-﻿// See https://aka.ms/new-console-template for more information
-
 using System;
 
-class Program
+class Calculator
 {
     static void Main(string[] args)
     {
-        double result = 0;
-        bool firstOperation = true;
+        bool continueCalculating = true;
 
-        Console.WriteLine("Консольный калькулятор");
-        Console.WriteLine("Введите 'exit' для выхода.");
-
-        while (true)
+        while (continueCalculating)
         {
-            if (firstOperation)
+            Console.WriteLine("Введите первое число:");
+            bool isFirstNumberValid = int.TryParse(Console.ReadLine(), out int number1);
+            if (!isFirstNumberValid)
             {
-                Console.Write("Введите первое число: ");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "exit") break;
-
-                if (double.TryParse(input, out result))
-                {
-                    firstOperation = false;
-                }
-                else
-                {
-                    Console.WriteLine("Неверный ввод. Попробуйте снова.");
-                    continue;
-                }
+                Console.WriteLine("Преобразование завершилось неудачно. Введите корректное число.");
+                continue;
             }
 
-            Console.Write("Введите оператор (+, -, *, /) или 'exit' для выхода: ");
-            string operation = Console.ReadLine();
-            if (operation.ToLower() == "exit") break;
-
-            Console.Write("Введите следующее число: ");
-            string nextInput = Console.ReadLine();
-            if (nextInput.ToLower() == "exit") break;
-
-            if (double.TryParse(nextInput, out double nextNumber))
+            Console.WriteLine("Введите второе число:");
+            bool isSecondNumberValid = int.TryParse(Console.ReadLine(), out int number2);
+            if (!isSecondNumberValid)
             {
-                switch (operation)
-                {
-                    case "+":
-                        result += nextNumber;
-                        break;
-                    case "-":
-                        result -= nextNumber;
-                        break;
-                    case "*":
-                        result *= nextNumber;
-                        break;
-                    case "/":
-                        if (nextNumber != 0)
-                            result /= nextNumber;
-                        else
-                            Console.WriteLine("Ошибка: деление на ноль.");
-                        break;
-                    default:
-                        Console.WriteLine("Неверный оператор. Попробуйте снова.");
-                        continue;
-                }
-
-                Console.WriteLine($"Результат: {result}");
+                Console.WriteLine("Преобразование завершилось неудачно. Введите корректное число.");
+                continue;
             }
-            else
+
+            Console.WriteLine("Выберите операцию (+, -, *, /):");
+            char operation = Console.ReadKey().KeyChar;
+            Console.WriteLine(); // Для перехода на новую строку
+
+            double result;
+
+            switch (operation)
             {
-                Console.WriteLine("Неверный ввод. Попробуйте снова.");
+                case '+':
+                    result = number1 + number2;
+                    Console.WriteLine($"Результат: {result}");
+                    break;
+
+                case '-':
+                    result = number1 - number2;
+                    Console.WriteLine($"Результат: {result}");
+                    break;
+
+                case '*':
+                    result = number1 * number2;
+                    Console.WriteLine($"Результат: {result}");
+                    break;
+
+                case '/':
+                    if (number2 != 0)
+                    {
+                        result = (double)number1 / number2;
+                        Console.WriteLine($"Результат: {result}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ошибка: Деление на ноль.");
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Неизвестная операция.");
+                    break;
+            }
+
+            Console.WriteLine("Хотите продолжить? (да/нет):");
+            string userResponse = Console.ReadLine().ToLower();
+            if (userResponse != "да")
+            {
+                continueCalculating = false;
             }
         }
 
-        Console.WriteLine("Выход из калькулятора. До свидания!");
+        Console.WriteLine("Спасибо за использование калькулятора!");
     }
 }
